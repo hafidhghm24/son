@@ -77,8 +77,29 @@ plt.ylabel("Amplitude")
 plt.title("spectre signal essai.wav")
 plt.show()
 
+print("\n--- CALCULE DU SPECTRE ET FENETRE DE HAMMING ---\n")
+extrait = signal[11300:(11300+1024)]
+plt.subplot(5,1,1)
+plt.plot(extrait)
+plt.subplot(5,1,2)
+
+#appliquer la fanetre de haming sur lextrait
+ham1024 = np.hamming(len(extrait))
+plt.plot(ham1024)
+plt.subplot(5,1,3)
+extrait_ham1024 = np.multiply(extrait, ham1024)
+plt.plot(extrait_ham1024)
+plt.subplot(5,1,4)
+spectre_f = abs(np.fft.fft(extrait))
+plt.plot(spectre_f[:512])
+
+#demispectre de lextrait auquelle on as appliquer la fenetre de hamming
+plt.subplot(5,1,5)
+spectre_f_ham1024 = abs(np.fft.fft(extrait_ham1024))
+plt.plot(spectre_f_ham1024[:512])
 
 print("\n--- SPECTROGRAMME DU SIGNAL ---\n")
+
 
 
 
