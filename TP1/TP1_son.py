@@ -71,16 +71,14 @@ plt.subplot(2,2,4)
 #on divise le spectre par deux
 demi_spectre = spectre_s1[0:floor(len(spectre_s1)/2)] #floor pour prendre les partie entirer
 
-plt.plot(((np.arange(len(demi_spectre))))/len(demi_spectre)*fs,demi_spectre)
+plt.plot(((np.arange(len(demi_spectre))))/len(demi_spectre)*fs/2,demi_spectre)
 plt.xlabel("frequence (hz)")
 plt.ylabel("Amplitude")
 plt.title("spectre signal essai.wav")
 plt.show()
 
 
-
-
-
+print("\n--- SPECTROGRAMME DU SIGNAL ---\n")
 
 
 
