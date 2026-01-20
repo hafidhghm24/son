@@ -125,7 +125,25 @@ plt.title("Spectrogramme de 0 3 8 et 0")
 plt.ylabel("Fréquence (Hz)")
 plt.xlabel("Temps (s)")
 plt.show()
+#on remarque que ....
 
 
+print("\n --- Echelle MEL ---\n")
 
-#ça regroupe toute les valeur denergie (les plus faible deviene plus grand yen as plus de cumuler comparer au pick ou cest plus faible)
+import canaux as MEL
+MEL.canaux(extrait, 16000, 26)
+#1er tracer: lextrait 
+#2eme tracer: spectre de lextrait
+#3eme tracer: ça regroupe toute les valeur denergie (les plus faible deviene plus grand yen as plus de cumuler comparer au pick ou cest plus faible)
+
+
+print("\n--- Calcul du cepstre ---\n")
+
+#calcule du cepstre: on fait le log du spectre 
+cepstre = abs(np.fft.fft(np.log(spectre_s1)))
+plt.figure(6)
+plt.plot( (np.arange(nb_points))/fs , cepstre )
+plt.title("cpestre de lextrait")
+plt.ylabel("Fréquence (Hz)")
+plt.xlabel("Temps (s)")
+plt.show()
