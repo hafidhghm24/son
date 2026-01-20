@@ -59,13 +59,19 @@ plt.title("spectre signal note.wav")
 #en zooment sur la seul valeur differente de 0, on trouve la frequence de la note (le seul pic) a 440hz 
 #il sagit de la note : la
 
+#extrait du signal  essai.wav
+extrait = signal[11300:(11300+1024)]
+
+#nombre de points de lextrait
+nb_points = len(extrait)
+
 plt.subplot(2,2,3)
-plt.plot( (np.arange(nb_points))/fs , signal )
+plt.plot( (np.arange(nb_points))/fs , extrait )
 plt.xlabel("Temp (second)")
 plt.ylabel("Amplitude")
 plt.title("signal essai.wav")
 
-spectre_s1 = abs(np.fft.fft(signal[11300:(11300+1024)]))
+spectre_s1 = abs(np.fft.fft(extrait))
 plt.subplot(2,2,4)
 
 #on divise le spectre par deux
@@ -97,7 +103,6 @@ plt.plot(spectre_f[:512])
 plt.subplot(5,1,5)
 spectre_f_ham1024 = abs(np.fft.fft(extrait_ham1024))
 plt.plot(spectre_f_ham1024[:512])
-
 print("\n--- SPECTROGRAMME DU SIGNAL ---\n")
 
 
