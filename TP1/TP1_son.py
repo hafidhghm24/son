@@ -84,29 +84,48 @@ plt.title("spectre signal essai.wav")
 plt.show()
 
 print("\n--- CALCULE DU SPECTRE ET FENETRE DE HAMMING ---\n")
-extrait = signal[11300:(11300+1024)]
+plt.figure(4)
 plt.subplot(5,1,1)
+#EXPLICATION: 
+
+#1er  tracer:   cest l'éxtrait du signal essai.wav
 plt.plot(extrait)
 plt.subplot(5,1,2)
 
-#appliquer la fanetre de haming sur lextrait
+#2eme tracer:   cest la fenetre de hamming avec le meme nombre de point que l'éxtrait
 ham1024 = np.hamming(len(extrait))
 plt.plot(ham1024)
 plt.subplot(5,1,3)
+
+
+#3eme tracer:   cest on as multiplier le 1erx2eme et de ce fait on a appliquer la fenetre de hamming sur l'éxtrait
 extrait_ham1024 = np.multiply(extrait, ham1024)
 plt.plot(extrait_ham1024)
 plt.subplot(5,1,4)
+
+#4eme tracer: (avant le hamming) cest le spectre de lextrait  limiter a 512 points 
 spectre_f = abs(np.fft.fft(extrait))
 plt.plot(spectre_f[:512])
-
-#demispectre de lextrait auquelle on as appliquer la fenetre de hamming
 plt.subplot(5,1,5)
+
+#5eme tracer: (apres le hamming) cest le spectre de lextrait  limiter a 512 points 
+
 spectre_f_ham1024 = abs(np.fft.fft(extrait_ham1024))
 plt.plot(spectre_f_ham1024[:512])
+plt.show()
+
+#fenetre de hamming cest .... son interet cest ....
+#les autres fenetres: 
+
 print("\n--- SPECTROGRAMME DU SIGNAL ---\n")
 
+plt.figure(5)
+plt.specgram(signal, Fs=fs, window=ham1024, NFFT=1024)
+plt.title("Spectrogramme de 0 3 8 et 0")
+plt.ylabel("Fréquence (Hz)")
+plt.xlabel("Temps (s)")
+plt.show()
 
 
 
-
-
+#ça regroupe toute les valeur denergie (les plus faible deviene plus grand yen as plus de cumuler comparer au pick ou cest plus faible)
