@@ -77,7 +77,7 @@ plt.subplot(2,2,4)
 
 #on divise le spectre par deux
 demi_spectre = spectre_s1[0:floor(len(spectre_s1)/2)] #floor pour prendre les partie entirer
-#toujour ! on ne garde que la moitié du spectre FFT car l'autre moitié cest la meme
+#toujour ! a*on ne garde que la moitié du spectre FFT car l'autre moitié cest la meme
 
 plt.plot(((np.arange(len(demi_spectre))))/len(demi_spectre)*fs/2,demi_spectre)
 plt.xlabel("frequence (hz)")
@@ -109,7 +109,9 @@ plt.subplot(5,1,4)
 
 #4eme tracer: (avant le hamming) cest le spectre de lextrait  limiter a 512 points 
 spectre_f = abs(np.fft.fft(extrait))
-plt.plot(spectre_f[:512])
+plt.plot(np.arange(512)/512 * fs/2, spectre_f[:512])
+plt.xlabel("Fréquence (Hz)")
+
 plt.subplot(5,1,5)
 
 #5eme tracer: (apres le hamming) cest le spectre de lextrait  limiter a 512 points 
@@ -147,8 +149,8 @@ plt.show()
 print("\n--- Calcul du cepstre ---\n")
 
 #calcule du cepstre: on fait le log du spectre 
-# CORRECTION: Ajout de + 1e-10 pour eviter l'erreur "divide by zero" si le spectre contient un 0 absolu
-cepstre = abs(np.fft.fft(np.log(spectre_s1 + 1e-10)))
+
+cepstre = abs(np.fft.fft(np.log(spectre_s1)))
 
 plt.figure(7)
 plt.plot( (np.arange(nb_points))/fs , cepstre )
