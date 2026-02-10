@@ -4,14 +4,15 @@ import numpy as np
 from math import floor
 
 #lire le fichier audio
+# Assure-toi que les fichiers 'essai.wav' et 'note.wav' sont bien dans le même dossier
 fs, signal = wav.read("essai.wav")
 
 #signal : cest un vecteur qui contien tout les points du signal
 #fs     : cest la frequence d'échantillonage (16000hz)
 
 print("\n--- AFFICHAGE DES VALEURS ---\n")
-print(f"la valeur du signal : ", signal, "\n")
-print(f"la valeur de fs : ", fs)
+print("la valeur du signal : ", signal, "\n")
+print("la valeur de fs : ", fs)
 
 print("\naffichage des 10 premiéres valeurs de signal")
 print(signal[0:10])
@@ -63,7 +64,7 @@ plt.title("spectre signal note.wav")
 extrait = signal[11300:(11300+1024)]
 
 #nombre de points de lextrait
-nb_points = len(extrait)
+nb_points = len(extrait) # Attention: on ecrase la variable nb_points precedente
 
 plt.subplot(2,2,3)
 plt.plot( (np.arange(nb_points))/fs , extrait )
@@ -76,12 +77,15 @@ plt.subplot(2,2,4)
 
 #on divise le spectre par deux
 demi_spectre = spectre_s1[0:floor(len(spectre_s1)/2)] #floor pour prendre les partie entirer
+#toujour ! on ne garde que la moitié du spectre FFT car l'autre moitié cest la meme
 
 plt.plot(((np.arange(len(demi_spectre))))/len(demi_spectre)*fs/2,demi_spectre)
 plt.xlabel("frequence (hz)")
 plt.ylabel("Amplitude")
 plt.title("spectre signal essai.wav")
 plt.show()
+
+#Fe = 16000 Hz donc la fréquence max qu'on peut capter = Fe/2 = 16000/2 = 8000 Hz (shanon)
 
 print("\n--- CALCULE DU SPECTRE ET FENETRE DE HAMMING ---\n")
 plt.figure(4)
@@ -131,19 +135,24 @@ plt.show()
 print("\n --- Echelle MEL ---\n")
 
 import canaux as MEL
+# La fonction canaux trace deja la figure 6
 MEL.canaux(extrait, 16000, 26)
 #1er tracer: lextrait 
 #2eme tracer: spectre de lextrait
 #3eme tracer: ça regroupe toute les valeur denergie (les plus faible deviene plus grand yen as plus de cumuler comparer au pick ou cest plus faible)
 
+# NOTE: Il faut souvent un plt.show() ici si canaux.py ne le fait pas a la fin
+plt.show() 
 
 print("\n--- Calcul du cepstre ---\n")
 
 #calcule du cepstre: on fait le log du spectre 
-cepstre = abs(np.fft.fft(np.log(spectre_s1)))
-plt.figure(6)
+# CORRECTION: Ajout de + 1e-10 pour eviter l'erreur "divide by zero" si le spectre contient un 0 absolu
+cepstre = abs(np.fft.fft(np.log(spectre_s1 + 1e-10)))
+
+plt.figure(7)
 plt.plot( (np.arange(nb_points))/fs , cepstre )
 plt.title("cpestre de lextrait")
-plt.ylabel("Fréquence (Hz)")
+plt.ylabel("Quefrency (s)") # Le cepstre est temporel (quefrency)
 plt.xlabel("Temps (s)")
 plt.show()
