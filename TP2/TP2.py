@@ -2,20 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wav
 
-# ---------------------------------------------------------------------
-# Paramètres généraux
-# ---------------------------------------------------------------------
-fe = 8000  # fréquence d'échantillonnage (Hz)
+# fréquence d'échantillonnage
+fe = 8000  
 
-# ---------------------------------------------------------------------
-# Génération des signaux sinusoïdaux
-# ---------------------------------------------------------------------
+#on fabrique le son
 def generate_sine_wave(frequence, duree, fe):
     n = np.arange(int(duree * fe))
     return np.sin(2 * np.pi * frequence * n / fe)
 
-duree_note = 1.0     # durée d'une note (s)
-duree_silence = 0.1  # durée du silence (s)
+duree_note = 1.0     # une note en seconde
+duree_silence = 0.1  # un silence en seconde
 
 silence = np.zeros(int(duree_silence * fe))
 
@@ -24,9 +20,7 @@ mi3  = generate_sine_wave(330, duree_note, fe)
 sol3 = generate_sine_wave(392, duree_note, fe)
 do4  = generate_sine_wave(523, duree_note, fe)
 
-# ---------------------------------------------------------------------
-# Construction du signal musical
-# ---------------------------------------------------------------------
+
 signal = np.concatenate((
     silence, do3,
     silence, mi3,
@@ -37,9 +31,7 @@ signal = np.concatenate((
 
 temps = np.arange(len(signal)) / fe
 
-# ---------------------------------------------------------------------
-# Affichage du signal temporel
-# ---------------------------------------------------------------------
+#affichage
 plt.figure()
 plt.plot(temps, signal)
 plt.title("Signal sonore")
@@ -48,14 +40,10 @@ plt.ylabel("Amplitude")
 plt.grid(True)
 plt.show()
 
-# ---------------------------------------------------------------------
-# Sauvegarde audio
-# ---------------------------------------------------------------------
+#sauvegarde de laudio
 wav.write("musique.wav", fe, signal.astype(np.float32))
 
-# ---------------------------------------------------------------------
-# Calcul du spectrogramme
-# ---------------------------------------------------------------------
+#creation du spectrogramme
 def spectro(signal, taille_fenetre, pas):
     nb_fen = (len(signal) - taille_fenetre) // pas + 1
     spec = np.zeros((taille_fenetre // 2, nb_fen))
@@ -72,9 +60,7 @@ def spectro(signal, taille_fenetre, pas):
 
 sp = spectro(signal, 1024, 512)
 
-# ---------------------------------------------------------------------
-# Affichage du spectrogramme
-# ---------------------------------------------------------------------
+#affichage
 plt.figure()
 plt.imshow(
     20 * np.log10(sp + 1e-6),
