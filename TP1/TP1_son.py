@@ -120,8 +120,11 @@ spectre_f_ham1024 = abs(np.fft.fft(extrait_ham1024))
 plt.plot(spectre_f_ham1024[:512])
 plt.show()
 
-#fenetre de hamming cest .... son interet cest ....
-#les autres fenetres: 
+# La fenêtre de Hamming est une courbe en cloche (0 aux bords, 1 au centre) qu'on multiplie point par point avec l'extrait pour adoucir les bords
+# nous permet denlever les fréquences parasites dues à la coupure brutale au bords
+# Autres fenêtres : Hanning, Blackman, Kaiser, Triangulaire
+
+
 
 print("\n--- SPECTROGRAMME DU SIGNAL ---\n")
 
@@ -131,8 +134,11 @@ plt.title("Spectrogramme de 0 3 8 et 0")
 plt.ylabel("Fréquence (Hz)")
 plt.xlabel("Temps (s)")
 plt.show()
-#on remarque que ....
 
+
+# Sur le spectrogramme on remarque au debut un pic avec une frequence tres jaune (peutetre un bip)
+#on as ensuite bcp de bleu (pas denergie donc silence)
+#on remarque aussi des vide dans la zone de parole (peutetre le silence entre les mots)
 
 print("\n --- Echelle MEL ---\n")
 
@@ -143,18 +149,36 @@ MEL.canaux(extrait, 16000, 26)
 #2eme tracer: spectre de lextrait
 #3eme tracer: ça regroupe toute les valeur denergie (les plus faible deviene plus grand yen as plus de cumuler comparer au pick ou cest plus faible)
 
-# NOTE: Il faut souvent un plt.show() ici si canaux.py ne le fait pas a la fin
+
 plt.show() 
 
 print("\n--- Calcul du cepstre ---\n")
 
 #calcule du cepstre: on fait le log du spectre 
 
-cepstre = abs(np.fft.fft(np.log(spectre_s1)))
+spectre_ham = abs(np.fft.fft(extrait_ham1024))  # spectre avec Hamming
+cepstre = abs(np.fft.ifft(np.log(np.maximum(spectre_ham, 1e-10)))) #on met un 
 
 plt.figure(7)
-plt.plot( (np.arange(nb_points))/fs , cepstre )
-plt.title("cpestre de lextrait")
-plt.ylabel("Quefrency (s)") # Le cepstre est temporel (quefrency)
+
+plt.subplot(3,1,1)
+plt.plot(np.arange(len(extrait))/fs, extrait)
+plt.title("Extrait du signal")
 plt.xlabel("Temps (s)")
+plt.ylabel("Amplitude")
+
+plt.subplot(3,1,2)
+demi = spectre_ham[:len(spectre_ham)//2]
+plt.plot(np.arange(len(demi))/len(demi) * fs/2, demi)
+plt.title("Spectre de l'extrait")
+plt.xlabel("fréquence (Hz)")
+plt.ylabel("intensité")
+
+plt.subplot(3,1,3)
+plt.plot(np.arange(len(cepstre))/fs, cepstre)
+plt.title("cepstre de l'extrait")
+plt.xlabel("quéfrency (s)")
+plt.ylabel("amplitude")
+
+plt.tight_layout()
 plt.show()
