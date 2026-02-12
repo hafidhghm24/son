@@ -23,36 +23,32 @@ def spectro(signal, taille_fenetre, pas):
 
 
 def main():
-    print("--- Génération d'un signal ---\n")
-    
-    fe = 8000           # fréquence d'échantillonnage
-    nb_echantillons = fe * 1  # 8000 points = 1 seconde (car fe = 8000)
+    fe = 16000
+    nb_echantillons = fe * 1 # 8000 points = 1 seconde
 
-    # Créer un silence de 100ms (que des 0)
-    silence = np.zeros(nb_echantillons // 10)  # 8000/10 = 800 points = 0.1s
+    #creer le silence de 0.1s
+    silence = np.zeros(nb_echantillons // 10)
+
 
     # Créer les notes (sinusoïdes)
     t = np.arange(nb_echantillons) / fe  # axe temps : [0, 1/8000, 2/8000, ..., 7999/8000]
-    
+        
     #sin(2pift)
-    sin_do3  = np.sin(t * 2 * np.pi * 262)   # DO3 = 262 Hz 
-    sin_mi3  = np.sin(t * 2 * np.pi * 330)   # MI3 = 330 Hz
-    sin_sol3 = np.sin(t * 2 * np.pi * 392)   # SOL3 = 392 Hz
-    sin_do4  = np.sin(t * 2 * np.pi * 523)   # DO4 = 523 Hz
+    do3  = np.sin(t * 2 * np.pi * 262)   # DO3 = 262 Hz 
+    mi3  = np.sin(t * 2 * np.pi * 330)   # MI3 = 330 Hz
+    sol3 = np.sin(t * 2 * np.pi * 392)   # SOL3 = 392 Hz    
+    la3  = np.sin(t * 2 * np.pi * 440)   # LA3 = 440 Hz
+    si3  = np.sin(t * 2 * np.pi * 494)   # si3 = 494
+    do4  = np.sin(t * 2 * np.pi * 523)   # DO4 = 523 Hz
+    re4  = np.sin(t * 2 * np.pi * 587)   # RE = 587 Hz
+
 
     # Concaténation
-    s = np.concatenate((silence, sin_do3, silence, sin_mi3, silence, sin_sol3, silence, sin_do4, silence))
+    s = np.concatenate((silence, sol3, la3, si3, sol3, la3, silence, la3, si3, do4, silence, do4 ,si3, silence, si3, sol3, la3, si3, sol3, la3, silence, la3, si3, do4, re4, sol3, sol3, silence))
 
 
-    # Affichage avec axe X en secondes
-    plt.figure(6)
-    plt.plot(np.arange(len(s)) / fe, s) 
-    plt.title("Signal mélodique")
-    plt.ylabel("Amplitude")            
-    plt.xlabel("Temps (s)")
-    plt.show()
-
-    wav.write("melodie.wav", fe, s.astype(np.float32))  # float32 pour les valeurs -1 à +1
+    #sauvegarder le fichier
+    wav.write("melodie_exam.wav", fe, s.astype(np.float32))  # float32 pour les valeurs -1 à +1
 
 
 
